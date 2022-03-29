@@ -73,7 +73,54 @@
 
    
 
+3. 2022年3月29日——[考试的最大困扰度](https://leetcode-cn.com/problems/maximize-the-confusion-of-an-exam/)
 
+   ```python
+   class Solution:
+       def subs(self, st, t, f, k):  # 计算字符串在ix位置以后，修改k次的最大连续相同题数
+           """计算一个字符串中T和F的个数，如果有其中一个小于等于k，则说明可以通过k次修改把字符串改为全部连续，依次从字符串左边和右边去除字符串让计数靠近k，递归求解取长度最长的"""
+           if t <= k or f <= k:  # 可以变为连续相同的字符串
+               return t + f
+           left = self.subs(st[1:], t-1 if st[0]=='T' else t, f-1 if st[0]=='F' else f, k)
+           right = self.subs(st[:-1], t-1 if st[-1]=='T' else t, f-1 if st[-1]=='F' else f, k)
+           return max(left, right)
+           
+       def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+           n = len(answerKey)  # 长度
+           if n == 1 or k == n:  # 特殊情况判断
+               return n
+           
+           cnt = Counter(answerKey)  # 记录T和F的个数
+           max_num = self.subs(answerKey, cnt['T'], cnt['F'], k)  # 最大值
+           return max_num
+   # 这样容易理解，但是当字符串长度很长时，使用递归效率很低，会超时。
+   # 用滑动窗口的思想，从左向右遍历，维护一个区间内某个字符(T或F)的数量不超过k，超过了则左端点右移。
+   
+   class Solution:
+       def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+           n = len(answerKey)  # 长度
+           if n == 1 or k == n:  # 特殊情况判断
+               return n
+           def consecutive_ch(ch):  # 判断字符串中ch字符连续的最大长度，k相当于容错
+               left, right = 0, 0  # 维护区间的左右序号
+               max_num = 0  # 记录最长长度
+               other_ch_num = 0  # 导致非连续的字符个数
+               while right < n:
+                   other_ch_num += answerKey[right] != ch
+                   while other_ch_num > k:
+                       other_ch_num -= answerKey[left] != ch
+                       left += 1
+                   
+                   max_num = max(max_num, right - left + 1)  #返回最长长度
+                   right += 1
+               return max_num
+           return max(consecutive_ch("T"), consecutive_ch("F"))
+   # 时间复杂度O(n)
+   # 空间复杂度O(1)
+   
+   ```
+
+   
 
 
 
