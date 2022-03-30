@@ -122,7 +122,54 @@
 
    
 
+4. 2022年3月30日——[找到处理最多请求的服务器](https://leetcode-cn.com/problems/find-servers-that-handled-most-number-of-requests/submissions/)
 
+   ```python
+   class Solution:
+       def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
+           server_map = {i: [0, 0] for i in range(k)}  # 创建一个服务器的字典，保存每个服务器当前处理的任务数量和最后一个任务完成的时间点
+           n = len(arrival)
+           for i in range(n):
+               pre_server = i % k  # 预选的服务器
+               if server_map[pre_server][1] <= arrival[i]:  # 判断预选的服务器是否有空闲处理任务i
+                   server_map[pre_server][0] += 1  # 能够处理任务i，预选服务器处理的任务数量加1
+                   server_map[pre_server][1] = arrival[i] + load[i]  # 最后完成任务的时间点
+               else:  # 不能处理当前任务，需要寻找下一个空闲服务器
+                   for j in range(k-1):  
+                       pre_server = (pre_server + 1) % k  # 下一个服务器
+                       if server_map[pre_server][1] <= arrival[i]:  # 判断预选的服务器是否有空闲处理任务i
+                           server_map[pre_server][0] += 1  # 能够处理任务i，预选服务器处理的任务数量加1
+                           server_map[pre_server][1] = arrival[i] + load[i]  # 最后完成任务的时间点
+                           break  # 当前任务得到处理，退出这层循环
+           max_num = max(server_map.values())[0]  # 处理任务最多的数量
+           return [i for i in server_map if server_map[i][0] == max_num] # 返回列表
+   # 这算是一种直译吧，
+   # 时间复杂度O(kn)
+   # 空间复杂度O(k)
+   # 但是会超时，需要优化优化或者换一种做法
+   
+   class Solution:
+       def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
+           server_map = {i: 0 for i in range(k)}  # 创建一个服务器的字典，保存每个服务器当前处理的任务数量
+           available = list(range(k))  # 可用的空闲的服务器，作为一个优先队列
+           busy = []  # 忙碌的服务器队列，保存服务器完成任务的时间点和服务器id
+           n = len(arrival)
+           for i in range(n):
+               while busy and busy[0][0] <= arrival[i]:  # 把busy中可以执行任务i的服务器移除
+                   _, idx = heapq.heappop(busy)  # 弹出，表示idx服务器变为空闲
+                   heapq.heappush(available, i + (idx - i) % k)  # 把idx服务器加入到空闲服务器队列，并且关键就在于服务器的编号是什么，这个编号要不小于i且同余于idx，这样才能在保证available中，编号小于i的空闲服务器能排到编号不小于i mod k的空闲服务器后面
+               if available:  # 表示有空闲的服务器
+                   idx = heapq.heappop(available) % k   # 空闲服务器的编号
+                   server_map[idx] += 1  # 服务器处理任务的数量加1
+                   heapq.heappush(busy, (arrival[i] + load[i], idx))  # 加入到busy队列中
+           max_num = max(server_map.values())  # 处理任务最多的数量
+           return [i for i in server_map if server_map[i] == max_num] # 返回列表
+   # 这里busy和available使用heapq来维护的优先队列，难点在available中服务器的编号，和前面相比大循环都是任务的数量n，内循环有一个堆维护的log k
+   # 时间复杂度O((k+n)log k)
+   # 空间复杂度O(k)
+   ```
+
+   
 
 
 
