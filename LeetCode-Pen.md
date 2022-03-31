@@ -171,7 +171,28 @@
 
    
 
+5. 2022年3月31日——[自除数](https://leetcode-cn.com/problems/self-dividing-numbers/)
 
+   ```python
+   class Solution:
+       def selfDividingNumbers(self, left: int, right: int) -> List[int]:
+           ans = []
+           for a in range(left, right+1):
+               str_a = str(a)  # 转换为字符串
+               p = 1  # 状态，用于判断是否是自除数
+               for sa in str_a:
+                   if sa == '0' or (a % int(sa)):  # 为0或不能整除则不是自除数
+                       p = 0
+                       break
+               if p:
+                   ans.append(a)
+           return ans
+   # 直译即可
+   # 时间复杂度O(nk)，n表示从left到right的区间长度，k为数值平均长度
+   # 空间复杂度O(1)
+   ```
+
+   
 
 
 
