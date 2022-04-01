@@ -194,7 +194,47 @@
 
    
 
+6. 2022年4月1日——[二倍数对数组](https://leetcode-cn.com/problems/array-of-doubled-pairs/)
 
+   ```python
+   class Solution:
+       def canReorderDoubled(self, arr: List[int]) -> bool:
+           if not arr:  # arr为空返回false
+               return False
+           a = arr.copy()
+           a.sort(key=lambda x: abs(x))  # 数组按绝对值排序
+           while a:
+               a0 = a.pop(0)  # 弹出一个最小的值
+               if 2 * a0 in a:  # 判断2倍的值是否在数组中
+                   a.remove(2 * a0)  # 移除，在数组中移除一个元素要O(n)时间复杂度，需要优化
+               else:
+                   break  # 说明有值不能找到两倍的值
+           if a:
+               return False
+           else:
+               return True
+   # 这种做法可能在判断2 * a0是否在a数组中和移除2 * a0元素时要花费较多时间，所以会超时，需要换一种操作
+   
+   class Solution:
+       def canReorderDoubled(self, arr: List[int]) -> bool:
+           if not arr:  # arr为空返回false
+               return False
+           cnt = Counter(arr)  # 对数组arr计数
+           if cnt[0] % 2:  # 0的个数为奇数说明0无法匹配
+               return False
+           for k in sorted(cnt, key=abs):  # cnt按照键的绝对值排序
+               if cnt[k] > cnt[2 * k]:  # k的数量大于2*k说明有部分的k没有足够的2*k匹配
+                   return False
+               cnt[2 * k] -= cnt[k]  # 减去已匹配的数量
+           return True
+   # 时间复杂度：O(nlogn)，其中 n 是数组 arr 的长度。最坏情况下哈希表中有 n 个元素，对其排序需要 O(nlogn) 的时间。
+   # 空间复杂度：O(n)。最坏情况下哈希表中有 n 个元素，需要 O(n) 的空间。
+   
+   
+   
+   ```
+
+   
 
 
 
