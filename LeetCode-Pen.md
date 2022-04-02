@@ -236,5 +236,163 @@
 
    
 
+7. 2022年4月2日——
 
+   ```python
+   class Solution:
+       def get_continuous(self, ss):
+           """
+           从ss中统计连续出现三次的字符数量，并返回需要修改的次数，以及3减去包含字符种类数
+           """
+           contains, continuous = [0] * 3, []
+           i = 0
+           while not all(contains):
+               if i >= len(ss):
+                   break
+               c = ss[i]
+               if contains[0] == 0 and c in string.ascii_lowercase:
+                   contains[0] = 1
+               if contains[1] == 0 and c in string.ascii_uppercase:
+                   contains[1] = 1
+               if contains[2] == 0 and c in string.digits:
+                   contains[2] = 1
+               i += 1
+           if len(ss) < 3:
+               return (3 - sum(contains), [0])
+           i, j = 0, 1
+           while True:
+               if j >= len(ss):
+                   if j - i >= 3:
+                       continuous.append(j - i)
+                   break
+               if ss[i] == ss[j]:
+                   j += 1
+               else:
+                   if j - i >= 3:
+                       continuous.append(j - i)
+                   i, j = j, j + 1
+           return (3 - sum(contains), continuous)
+       def strongPasswordChecker(self, password: str) -> int:
+           L = len(password)
+           contains, continues = self.get_continuous(password)
+           continuous = sum([a // 3 for a in continues])
+           if 6 <= L <= 20:
+               if contains <= 0 and continuous == 0:
+                   return 0
+               elif contains >= continuous:
+                   return contains
+               else:
+                   return continuous
+           elif L > 20:
+               diff_l = L - 20
+               cnt3 = sum([1 for a in continues if a % 3 == 0])
+               if cnt3 <= diff_l:
+                   continues = [a - 1 for a in continues if a % 3 == 0 and a - 1 >= 3]
+                   rem = diff_l - cnt3
+                   continues2 = []
+                   for j, a in enumerate(continues):
+                       if a > rem:
+                           continues2.append(a - rem)
+                           continues2 += continues[j+1:]
+                           break
+                       elif a == rem:
+                           continues2 += continues[j+1:]
+                           break
+                       else:
+                           rem = rem - a
+                   continues = continues2
+                   return diff_l + max(contains, sum([a // 3 for a in continues]))
+               else:
+                   continues = [a - 1 for a in continues.sort()[diff_l+1] if a % 3 == 0 and a - 1 >= 3] + continues[diff_l+1:]
+                   return diff_l + max(contains, sum([a // 3 for a in continues]))
+               # continues = [a - 1 for a in continues if a % 3 == 0 and a - 1 >= 3]
+               # if diff_l >= continuous:
+               #     continues = [a - (diff_l - cnt3) if a >= (diff_l - cnt3) for a in continues]
+               #     return cnt3 + max(contains, sum([a // 3 for a in continues]))
+               #     # return diff_l + contains if contains > 0 else 0
+               # else:
+               #     if cnt3 >= diff_l:
+               #         return sum([a // 3 for a in continues])
+               #     return diff_l + max(continuous - diff_l, contains)
+           else:
+               diff_l = 6 - L
+               return max(diff_l, contains, continuous)
+   # 分情况模拟就行，但是情况有些许复杂，上面代码没有完善，后面有时间完成一下，先抄一抄别的大佬的代码
+   
+   class Solution:
+       def strongPasswordChecker(self, password: str) -> int:
+           n = len(password)
+           has_lower = has_upper = has_digit = False
+           for ch in password:
+               if ch.islower():
+                   has_lower = True
+               elif ch.isupper():
+                   has_upper = True
+               elif ch.isdigit():
+                   has_digit = True
+           
+           categories = has_lower + has_upper + has_digit
+   
+           if n < 6:
+               return max(6 - n, 3 - categories)
+           elif n <= 20:
+               replace = cnt = 0
+               cur = "#"
+   
+               for ch in password:
+                   if ch == cur:
+                       cnt += 1
+                   else:
+                       replace += cnt // 3
+                       cnt = 1
+                       cur = ch
+               
+               replace += cnt // 3
+               return max(replace, 3 - categories)
+           else:
+               # 替换次数和删除次数
+               replace, remove = 0, n - 20
+               # k mod 3 = 1 的组数，即删除 2 个字符可以减少 1 次替换操作
+               rm2 = cnt = 0
+               cur = "#"
+   
+               for ch in password:
+                   if ch == cur:
+                       cnt += 1
+                   else:
+                       if remove > 0 and cnt >= 3:
+                           if cnt % 3 == 0:
+                               # 如果是 k % 3 = 0 的组，那么优先删除 1 个字符，减少 1 次替换操作
+                               remove -= 1
+                               replace -= 1
+                           elif cnt % 3 == 1:
+                               # 如果是 k % 3 = 1 的组，那么存下来备用
+                               rm2 += 1
+                           # k % 3 = 2 的组无需显式考虑
+                       replace += cnt // 3
+                       cnt = 1
+                       cur = ch
+               
+               if remove > 0 and cnt >= 3:
+                   if cnt % 3 == 0:
+                       remove -= 1
+                       replace -= 1
+                   elif cnt % 3 == 1:
+                       rm2 += 1
+               
+               replace += cnt // 3
+   
+               # 使用 k % 3 = 1 的组的数量，由剩余的替换次数、组数和剩余的删除次数共同决定
+               use2 = min(replace, rm2, remove // 2)
+               replace -= use2
+               remove -= use2 * 2
+               # 由于每有一次替换次数就一定有 3 个连续相同的字符（k / 3 决定），因此这里可以直接计算出使用 k % 3 = 2 的组的数量
+               use3 = min(replace, remove // 3)
+               replace -= use3
+               remove -= use3 * 3
+               return (n - 20) + max(replace, 3 - categories)
+   
+   ```
+
+   
 
