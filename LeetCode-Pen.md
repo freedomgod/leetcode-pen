@@ -236,7 +236,7 @@
 
    
 
-7. 2022年4月2日——
+7. 2022年4月2日——[强密码检验器](https://leetcode-cn.com/problems/strong-password-checker/)
 
    ```python
    class Solution:
@@ -396,3 +396,43 @@
 
    
 
+8. 2022年4月3日——[寻找比目标字母大的最小字母](https://leetcode-cn.com/problems/find-smallest-letter-greater-than-target/)
+
+   ```python
+   class Solution:
+       def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+           """
+           看到要在排序后的字符列表里找目标字符，第一想到的就是二分查找了，只需要处理好细节方面
+           """
+           left, right = 0, len(letters) - 1  # 初始时定义左边和右边的指针
+           mid = (left + right) // 2  # 中间位置
+           while left < right:  # 循环条件
+               if target > letters[mid]:  # 在右边部分则把left指针指向中间位置
+                   left = mid + 1
+               elif target == letters[mid]:  # 如果相等则直接退出
+                   break
+               else:
+                   right = mid - 1
+               mid = abs(left + right) // 2
+           n = len(letters)
+           while True:   # 要判断mid位置的情况
+               if mid < n:
+                   if target > letters[mid]:  # 如果目标字符更大，则返回下一个位置的字符，因为下一个位置的字符一定比目标字符大，但是要判断位置是否合法，不合法则返回第一个位置的字符
+                       return letters[mid+1] if (mid+1) < n else letters[0]
+                   elif target < letters[mid]:  # 目标字符更小，则该位置的字符就是第一个比目标字符大的字母
+                       return letters[mid]
+                   else:
+                       mid += 1  # 和目标字符相等的情况下要过滤掉
+               else:
+                   return letters[0]
+   # 要注意自己写的二分查要做好细节方面
+   # 时间复杂度：O(log n)
+   # 空间复杂度：O(1)
+   
+   class Solution:
+       def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+           return letters[bisect_right(letters, target)] if target < letters[-1] else letters[0]
+   # 这是大佬的利用已有的二分查找库函数的代码，太简单了
+   ```
+
+   
