@@ -435,4 +435,84 @@
    # 这是大佬的利用已有的二分查找库函数的代码，太简单了
    ```
 
+
+
+
+9. 2022年4月4日——[区域和检索](https://leetcode-cn.com/problems/range-sum-query-mutable/)
+
+   ```python
+   class NumArray:
    
+       def __init__(self, nums: List[int]):
+           self.nums = nums
+   
+       def update(self, index: int, val: int) -> None:
+           self.nums[index] = val  # 更新值
+   
+       def sumRange(self, left: int, right: int) -> int:
+           return sum(self.nums[left:right+1])  # 每次求和都会做很多重复工作，时间复杂度较大
+   
+   # 假设调用 update 和 sumRange 方法次数分别为m、n次，left到right区间的平均长度是k
+   # 时间复杂度：O(m + nk)
+   # 空间复杂度：O(1)
+           
+   
+   # 改进
+   class NumArray:
+   
+       def __init__(self, nums: List[int]):
+           self.nums = nums
+           self.sums = list(accumulate(nums))  # 累加，每个位置对应的是nums的前i个数的和
+   
+       def update(self, index: int, val: int) -> None:
+           diff_value = val - self.nums[index]
+           self.nums[index] = val  # 更新值
+           self.sums[index:] = map(lambda x: x + diff_value, self.sums[index:])  # 更新sums
+   
+       def sumRange(self, left: int, right: int) -> int:
+           if left == 0:
+               return self.sums[right]
+           else:
+               return self.sums[right] - self.sums[left-1]
+   
+   # 假设调用 update 和 sumRange 方法次数分别为m、n次，index平均值为k
+   # 时间复杂度：O(mk)
+   # 空间复杂度：O(L)
+   
+   class NumArray:
+   
+       def __init__(self, nums: List[int]):
+           self.nums = nums
+           self.L = len(nums)
+           self.size = int(self.L ** .5)  # 取每个块的大小为根号n
+           self.sums = [0] * ((self.L + self.size - 1) // self.size)  # 块的数量，每个块记录其和
+           for i in range(self.L):
+               self.sums[i // self.size] += self.nums[i]
+   
+       def update(self, index: int, val: int) -> None:
+           diff_value = val - self.nums[index]
+           self.nums[index] = val  # 更新值
+           self.sums[index // self.size] += diff_value  # 更新sums
+   
+       def sumRange(self, left: int, right: int) -> int:
+           ls = left // self.size
+           rs = right // self.size
+           if ls == rs:
+               return sum(self.nums[left:right+1])
+           else:
+               return sum(self.nums[left:(ls + 1) * self.size]) + sum(self.sums[ls+1:rs]) + sum(self.nums[rs * self.size:right+1])
+   
+   # 时间复杂度：构造函数为 O(n)，update 函数为 O(1)，sumRange 函数为 O(sqrt(n))，其中 n 为数组 nums 的大小。对于sumRange 函数，我们最多遍历两个块以及 sum 数组，因此时间复杂度为 O(sqrt(n))。
+   # 空间复杂度：O(sqrt(n))
+   # 这是分块的思想，相比我前面写的两种，本质还是暴力，没有节省多少时间，而这里更新索引的值时，不用更新所有的和，而是只需更新块的和，效率更高
+   
+   ```
+
+   
+
+10. 
+
+
+
+
+
