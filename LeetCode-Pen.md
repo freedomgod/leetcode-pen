@@ -510,7 +510,108 @@
 
    
 
-10. 
+10. 2022年4月5日——[二进制表示中质数个计算置位](https://leetcode-cn.com/problems/prime-number-of-set-bits-in-binary-representation/)
+
+    ```python
+    class Solution:
+        def countPrimeSetBits(self, left: int, right: int) -> int:
+            def isprime(x):  # 判断是否是素数
+                if x < 2:
+                    return False
+                i = 2
+                while i ** 2 <= x:
+                    if x % i == 0:
+                        return False
+                    i += 1
+                return True
+            
+            def int2bin(x):  # 也可以尝试手写一个二进制转换
+                if x == 0:
+                    return '0'
+                ans = ''
+                while x:
+                    ans = str(x % 2) + ans
+                    x = x >> 1
+                return ans
+            
+            cnt = 0  # 计数
+            for a in range(left, right + 1):
+                b = bin(a)[2:]  # 整数转二进制
+                if isprime(sum(map(lambda x: int(x), b))):  # 判断1的个数是否为素数
+                    cnt += 1
+            return cnt
+    # 时间复杂度：数n的二进制位数是int(log2n) + 1，判断一个数是否为素数的时间复杂度是sqrt(x)，所以判断一个区间L的时间复杂度大概为O(L*sqrt(log2n))
+    # 空间复杂度：O(1)
+    # 这个直接做差点超时，需要优化
+    
+    
+    class Solution:
+        def countPrimeSetBits(self, left: int, right: int) -> int:
+            def isprime(x):  # 判断是否是素数
+                if x < 2:
+                    return False
+                i = 2
+                while i ** 2 <= x:
+                    if x % i == 0:
+                        return False
+                    i += 1
+                return True
+            
+            def int2bin(x):  # 也可以尝试手写一个二进制转换
+                if x == 0:
+                    return '0'
+                ans = ''
+                while x:
+                    ans = str(x % 2) + ans
+                    x = x >> 1
+                return ans
+            cnt = 0  # 计数
+            dic = {}  # 创建一个字典，记录是否是素数，减少判断素数的时间
+            for a in range(left, right + 1):
+                b = bin(a)[2:]  # 整数转二进制
+                num = sum(map(lambda x: int(x), b))  # 1的个数
+                try:
+                    if dic[num]:  # num在字典中，则直接取值判断是否是素数
+                        cnt += 1
+                except KeyError:
+                    dic[num] = isprime(num)  # num不在字典中，则判断是否素数并保存结果
+                    if dic[num]:
+                        cnt += 1
+            return cnt
+    # 这样改了一点，结果优化的效果很有限
+    
+    class Solution:
+        def countPrimeSetBits(self, left: int, right: int) -> int:
+            def isprime(x):  # 判断是否是素数
+                if x < 2:
+                    return False
+                i = 2
+                while i ** 2 <= x:
+                    if x % i == 0:
+                        return False
+                    i += 1
+                return True
+    
+            return sum(isprime(bin(x).count('1')) for x in range(left, right + 1))  # 不啰嗦，直接一个列表推导式求和就是结果
+    # 这个本质上是一样的解法，不过用时居然比我前面写的快了很多，感觉原因可能是语句太啰嗦了，还多执行了sum求和函数
+    # 还有一种利用位运算判断质数的方法，效率更高。
+    ```
+
+    
+
+11. 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
