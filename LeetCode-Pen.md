@@ -599,7 +599,93 @@
 
     
 
-11. 
+11. 2022年4月6日——[最小高度树](https://leetcode-cn.com/problems/minimum-height-trees/)
+
+    ```python
+    class Solution:
+        def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+            if n == 1:
+                return [0]
+            dic = {}
+            for a, b in edges:
+                if a not in dic:
+                    dic[a] = [b]
+                else:
+                    dic[a].append(b)
+                if b not in dic:
+                    dic[b] = [a]
+                else:
+                    dic[b].append(a)
+            
+            def dfs(start):
+                ans = []
+                q = deque([(start, 0)])  # 队列保存的是节点和根节点到该节点的距离或者说深度
+                vis = {start}  # 记录遍历过的节点
+                while q:  # 广度优先搜索
+                    k = len(q)
+                    for _ in range(k):
+                        nd, d = q.popleft()
+                        ans.append((nd, d))
+                        for x in dic[nd]:
+                            if x not in vis:
+                                vis.add(x)
+                                q.append((x, d + 1))
+                return ans[-1][1]
+            
+            depth = []  # 难点在于如何把一种情况推广到所有节点为根节点的情况，找最短高度
+            for i in range(n):
+                depth.append(dfs(i))
+            return [i for i, x in enumerate(depth) if x == min(depth)]
+    # 时间复杂度：O(n^2)
+    # 空间复杂度：O(n)
+    
+    
+    class Solution:
+        def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+            if n == 1:
+                return [0]
+            dic = {}
+            for a, b in edges:
+                if a not in dic:
+                    dic[a] = [b]
+                else:
+                    dic[a].append(b)
+                if b not in dic:
+                    dic[b] = [a]
+                else:
+                    dic[b].append(a)
+            
+            parents = [0] * n
+            def dfs(start):
+                ans = []
+                q = deque([(start, 0)])  # 队列保存的是节点和根节点到该节点的距离或者说深度
+                vis = {start}  # 记录遍历过的节点
+                while q:  # 广度优先搜索
+                    k = len(q)
+                    for _ in range(k):
+                        nd, d = q.popleft()
+                        ans.append((nd, d))
+                        for x in dic[nd]:
+                            if x not in vis:
+                                vis.add(x)
+                                q.append((x, d + 1))
+                                parents[x] = nd  # 记录的是x的父节点nd
+                return ans[-1][0]
+            
+            x = dfs(0)  # 0为根节点，返回的x为最大深度的末尾的节点
+            y = dfs(x)  # 再遍历x为根节点的情况，找最长的路径
+            path = []   # 记录路径
+            parents[x] = -1  # 赋值为-1是结束的条件，根节点无父节点
+            while y != -1:
+                path.append(y)
+                y = parents[y]
+            m = len(path)
+            return [path[m // 2]] if m % 2 else [path[m // 2 - 1], path[m // 2]]
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
+
+    
 
 
 
