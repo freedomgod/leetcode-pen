@@ -1,17 +1,17 @@
 @echo off
-echo Е╫⌠Е┴█Х╥╞Е╬└ E:\Ф┬▒Г └Х╣└Ф√≥\Ф√┤Г╚═Е╓┤Д╩╫\leetcode-pen
-cd E:\Ф┬▒Г └Х╣└Ф√≥\Ф√┤Г╚═Е╓┤Д╩╫\leetcode-pen
+echo ╣╠г╟б╥╬╤ E:\нр╣двйао\ндуб╠╦╥щ\leetcode-pen
+cd E:\нр╣двйао\ндуб╠╦╥щ\leetcode-pen
 
-echo Г┼╤Ф─│
+echo в╢л╛
 git status
 
-echo Ф╥╩Е┼═Ф┴─Ф°┴Д©╝Ф■╧Х©┤Г └Ф√┤Д╩╤
+echo лМ╪скЫсппч╦д╧Щ╣днд╪Ч
 git add .
 
-echo Ф▐░Д╨╓Ф┴─Ф°┴Д©╝Ф■╧
+echo лА╫╩кЫсппч╦д
 git commit -m "update"
 
-echo Ф▌╗И─│Х©°Г╗▀
+echo мфкмт╤Ёл
 git push
 
 pause
