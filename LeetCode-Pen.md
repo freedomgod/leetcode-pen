@@ -687,7 +687,29 @@
 
     
 
+12. 2022年4月7日——[旋转字符串](https://leetcode-cn.com/problems/rotate-string/)
 
+    ```python
+    class Solution:
+        def rotateString(self, s: str, goal: str) -> bool:
+            n, m = len(s), len(goal)
+            if n != m:
+                return False
+            for i in range(n):  # 直译即可
+                if s[i+1:] + s[:i+1] == goal:   # 遍历字符串s把左边的部分旋转到右边和目标字符串比较
+                    return True
+            return False
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    
+    class Solution:
+        def rotateString(self, s: str, goal: str) -> bool:
+            return len(s) == len(goal) and goal in s + s
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
+
+    
 
 
 
