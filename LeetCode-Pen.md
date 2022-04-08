@@ -711,9 +711,41 @@
 
     
 
-13. 
+13. 2022年4月8日——[N 叉树的层序遍历](https://leetcode-cn.com/problems/n-ary-tree-level-order-traversal/)
 
+    ```python
+    """
+    # Definition for a Node.
+    class Node:
+        def __init__(self, val=None, children=None):
+            self.val = val
+            self.children = children
+    """
+    
+    class Solution:
+        def levelOrder(self, root: 'Node') -> List[List[int]]:
+            if not root:  # 根节点为空
+                return []
+            q = deque([root])  # 队列，实现广度优先遍历，非递归实现
+            res = []
+            while q:
+                n = len(q)
+                cur = []  # 存储当前一层的节点值
+                for _ in range(n):   # n代表了这一层的节点
+                    nd = q.popleft()
+                    cur.append(nd.val)
+                    if nd.children:  # 孩子节点非空
+                        q.extend(nd.children)  # 下一层的孩子节点加入队列
+                res.append(cur)
+            return res
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
 
+    
+
+14. 
 
 
 
