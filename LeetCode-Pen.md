@@ -745,7 +745,82 @@
 
     
 
-14. 
+14. 2022年4月9日——[到达终点](https://leetcode-cn.com/problems/reaching-points/)
+
+    ```python
+    class Solution:
+        def reachingPoints(self, sx: int, sy: int, tx: int, ty: int) -> bool:
+            if sx > tx or sy > ty:
+                return False
+            q = deque([(sx, sy)])   # 广度优先搜索
+            while q:
+                n = len(q)
+                for i in range(n):
+                    x, y = q.popleft()
+                    if x == tx and y == ty:  # 判断是否是终点
+                        return True
+                    elif x > tx or y > ty:   # 坐标过头了，不可能到达终点
+                        continue
+                    else:
+                        q.extend([(x, x + y), (x + y, y)])  # 添加下一个可能的位置
+            return False
+    # 很明显广搜虽然能解，但是每个位置都有两个方向搜索，差不多是2^n，起点和终点距离远一点就会花费很长时间搜索
+    
+    
+    class Solution:
+        def reachingPoints(self, sx: int, sy: int, tx: int, ty: int) -> bool:
+            if sx > tx or sy > ty:  # 判断初始终点位置大于起点
+                return False
+            while sx <= tx and sy <= ty:  # 循环条件
+                if sx == tx and sy == ty:  # 判断终点
+                    return True
+                if tx > ty:   # 判断是从哪种情况的转换，还原对应的坐标即可
+                    tx, ty = tx - ty, ty
+                elif tx < ty:
+                    tx, ty = tx, ty - tx
+                else:
+                    return False
+            return False
+        
+    # 这里是利用新转换后的坐标x,y不可能相等，直接从终点开始反推，看能不能得到起点，那么时间复杂度取决于起点和终点较大的区间距离
+    # 但也有极端的情况，使得在反推坐标的时候，重复多做了无意义的循环，所以还要再改下
+    
+    class Solution:
+        def reachingPoints(self, sx: int, sy: int, tx: int, ty: int) -> bool:
+            if sx > tx or sy > ty:  # 判断初始终点位置大于起点
+                return False
+            while sx <= tx and sy <= ty:  # 循环条件
+                if sx == tx and sy == ty:  # 判断终点
+                    return True
+                if tx > ty:   # 判断是从哪种情况的转换，还原对应的坐标即可
+                    k = (tx - sx) // ty  # 求出一个k，让新的tx、ty仍然是大于等于起点坐标的
+                    if k:
+                        tx, ty = tx - ty * k, ty
+                    else:  # 如果k为0，说明下一步的坐标必定会小于起点坐标
+                        return False
+                elif tx < ty:
+                    k = (ty - sy) // tx
+                    if k:
+                        tx, ty = tx, ty - tx * k
+                    else:
+                        return False
+                else:
+                    return False
+            return False
+    
+    # 时间复杂度：emmm，好像是O(log(max(tx, ty)))
+    # 空间复杂度：O(1)
+    ```
+
+    
+
+15. 
+
+
+
+
+
+
 
 
 
