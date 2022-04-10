@@ -814,7 +814,29 @@
 
     
 
-15. 
+15. 2022年4月10日——[唯一摩尔斯密码词](https://leetcode-cn.com/problems/unique-morse-code-words/)
+
+    ```python
+    class Solution:
+        def uniqueMorseRepresentations(self, words: List[str]) -> int:
+            alph = string.ascii_lowercase
+            mose = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+            d = dict(zip(alph, mose))  # 建立字母关于摩尔斯密码的字典
+            vis = set()  # 保存单词翻译的结果
+            for w in words:  # 遍历每个单词
+                trans = ""
+                for c in w:
+                    trans += d[c]
+                if trans not in vis:  # 不同的单词翻译
+                    vis.add(trans)
+            return len(vis)
+    
+    # 设words长度为n，每个单词平均长度为m，或者说words中单词总长度为S
+    # 时间复杂度：O(n*m) / O(S)
+    # 空间复杂度：O(n)   / O(S)
+    ```
+
+    
 
 
 
