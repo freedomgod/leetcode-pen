@@ -838,9 +838,49 @@
 
     
 
+16. 2022年4月11日——[统计各位数字都不同的数字个数](https://leetcode-cn.com/problems/count-numbers-with-unique-digits/)
 
+    ```python
+    def countnum():
+        d = [1]
+        for i in range(1, 9):
+            tmp = 0
+            b = [10 ** (i - 1), 10 ** i]
+            for j in range(b[0], b[1]):
+                if len(set(str(j))) < i:
+                    tmp += 1
+            d.append(b[1] - b[0] - tmp + d[-1])
+        return d
+    
+    class Solution:
+        def countNumbersWithUniqueDigits(self, n: int) -> int:
+            countnum = [1, 10, 91, 739, 5275, 32491, 168571, 712891, 2345851]  # 打表
+            return countnum[n]
+        
+    # 直接暴力会超时，但是因为n的范围是0~8，所以可以在IDE或其他地方把所有情况求出来然后打表
+    
+    
+    class Solution:
+        def countNumbersWithUniqueDigits(self, n: int) -> int:
+            # countnum = [1, 10, 91, 739, 5275, 32491, 168571, 712891, 2345851]  # 打表
+            # return countnum[n]
+            if n == 0:
+                return 1
+            ans = 10  # 记录只有一位数的情况为10种
+            cur = 1  # 记录末位要乘的数
+            for i in range(2, n+1):  # 找每个位数的情况相加
+                cur *= (10 - i + 1)  # 9*9 + 9*9*8 + 9*9*8*7 + ……
+                ans += 9 * cur
+            return ans
+        
+    # 实际上这个问题是一个组合问题，第一个位数只能从9个数选择，剩下的位数可选的要依次减一
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
 
+    
 
+17. 
 
 
 
