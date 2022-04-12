@@ -880,7 +880,74 @@
 
     
 
-17. 
+17. 2022年4月12日——[写字符串需要的行数](https://leetcode-cn.com/problems/number-of-lines-to-write-string/)
+
+    ```python
+    class Solution:
+        def numberOfLines(self, widths: List[int], s: str) -> List[int]:
+            dic = dict(zip(string.ascii_lowercase, widths))  # 把字母所需单位映射到字典
+            max_len = 100  # 每行最大单位
+            cur_len = 0  # 当前行的长度
+            i, n = 0, len(s)
+            ans = [1, 0]  # 结果
+            while i < n:
+                if (cur_len + dic[s[i]]) <= max_len:  # 当前行还能写字母
+                    cur_len += dic[s[i]]  # 增加长度
+                    ans[1] = cur_len  # 更新结果
+                else:
+                    cur_len = dic[s[i]]  # 开启新的一行
+                    ans[1] = cur_len
+                    ans[0] += 1
+                i += 1
+            return ans
+        
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
+
+18. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
