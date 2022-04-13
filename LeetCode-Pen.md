@@ -1,3 +1,7 @@
+# 2022年
+
+## 3月
+
 1. 2022年3月27日——[找出缺失的观测数据](https://leetcode-cn.com/problems/find-missing-observations/)
 
    ```python
@@ -194,6 +198,8 @@
 
    
 
+## 4月
+
 6. 2022年4月1日——[二倍数对数组](https://leetcode-cn.com/problems/array-of-doubled-pairs/)
 
    ```python
@@ -235,6 +241,7 @@
    ```
 
    
+
 
 7. 2022年4月2日——[强密码检验器](https://leetcode-cn.com/problems/strong-password-checker/)
 
@@ -907,7 +914,84 @@
 
     
 
-18. 
+18. 2022年4月13日——[O(1) 时间插入、删除和获取随机元素](https://leetcode-cn.com/problems/insert-delete-getrandom-o1/)
+
+    ```python
+    class RandomizedSet:
+    
+        def __init__(self):
+            self.sets = set()  # 初始化集合
+    
+        def insert(self, val: int) -> bool:
+            n = len(self.sets)  # 插入值之前集合的长度
+            self.sets.add(val)  # 把val加入集合
+            return len(self.sets) != n  # 如何插入后的长度和n不同同则返回True
+    
+        def remove(self, val: int) -> bool:
+            try:
+                self.sets.remove(val)  # 在集合中移除val
+                return True
+            except KeyError:
+                return False  # 不存在则返回False
+    
+        def getRandom(self) -> int:
+            return random.choice(list(self.sets))  # 使用随机函数choice随机选择集合中的一个值
+    
+    
+    # Your RandomizedSet object will be instantiated and called as such:
+    # obj = RandomizedSet()
+    # param_1 = obj.insert(val)
+    # param_2 = obj.remove(val)
+    # param_3 = obj.getRandom()
+    
+    # 只是一般的实现方式，但我不确定是否是O(1)时间复杂度，因为在插入值的时候会求集合的长度。所以实际上要用哈希表+列表来实现
+    
+    class RandomizedSet:
+        def __init__(self):
+            self.nums = []
+            self.indices = {}
+    
+        def insert(self, val: int) -> bool:
+            if val in self.indices:
+                return False
+            self.indices[val] = len(self.nums)
+            self.nums.append(val)
+            return True
+    
+        def remove(self, val: int) -> bool:
+            if val not in self.indices:
+                return False
+            id = self.indices[val]
+            self.nums[id] = self.nums[-1]
+            self.indices[self.nums[id]] = id
+            self.nums.pop()
+            del self.indices[val]
+            return True
+    
+        def getRandom(self) -> int:
+            return choice(self.nums)
+        
+    # 时间复杂度：O(1)
+    # 空间复杂度：O(n)
+    ```
+
+    
+
+19. 
+
+
+
+
+
+## 5月
+
+
+
+
+
+
+
+
 
 
 
