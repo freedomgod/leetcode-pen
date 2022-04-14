@@ -977,7 +977,28 @@
 
     
 
-19. 
+19. 2022年4月14日——[最富有客户的资产总量](https://leetcode-cn.com/problems/richest-customer-wealth/)
+
+    ```python
+    class Solution:
+        def maximumWealth(self, accounts: List[List[int]]) -> int:
+            return max(map(lambda x: sum(x), accounts))
+        
+    # 时间复杂度：O(m*n)
+    # 空间复杂度：O(1)
+    ```
+
+    
+
+
+
+
+
+
+
+
+
+
 
 
 
