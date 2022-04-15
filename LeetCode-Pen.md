@@ -990,6 +990,44 @@
 
     
 
+20. 2022年4月15日——[迷你语法分析器](https://leetcode-cn.com/problems/mini-parser/)
+
+    ```python
+    class Solution:
+        def deserialize(self, s: str) -> NestedInteger:
+            if s[0] != '[':
+                return NestedInteger(int(s))
+            stack, num, negative = [], 0, False
+            for i, c in enumerate(s):
+                if c == '-':
+                    negative = True
+                elif c.isdigit():
+                    num = num * 10 + int(c)
+                elif c == '[':
+                    stack.append(NestedInteger())
+                elif c in ',]':
+                    if s[i-1].isdigit():
+                        if negative:
+                            num = -num
+                        stack[-1].add(NestedInteger(num))
+                    num, negative = 0, False
+                    if c == ']' and len(stack) > 1:
+                        stack[-2].add(stack.pop())
+            return stack.pop()
+    
+    # 比较明显的类似于括号匹配一类的可以用栈解决的问题，可以用递归、栈来解决
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
+
+    
+
+21. 
+
+
+
+
+
 
 
 
