@@ -1022,7 +1022,30 @@
 
     
 
-21. 
+21. 2022年4月16日——[最大回文数乘积](https://leetcode-cn.com/problems/largest-palindrome-product/)
+
+    ```python
+    class Solution:
+        def largestPalindrome(self, n: int) -> int:
+            if n == 1:
+                return 9
+            upper = 10 ** n - 1
+            for left in range(upper, upper // 10, -1):  # 枚举回文数的左半部分
+                p, x = left, left
+                while x:
+                    p = p * 10 + x % 10  # 翻转左半部分到其自身末尾，构造回文数 p
+                    x //= 10
+                x = upper
+                while x * x >= p:
+                    if p % x == 0:  # x 是 p 的因子
+                        return p % 1337
+                    x -= 1
+    # 貌似只能枚举了，而枚举又要想办法是最大的，所以通过构造回文数，判断是否符合条件
+    # 时间复杂度：O(10^2n)
+    # 空间复杂度：O(1)
+    ```
+
+    
 
 
 
