@@ -1047,10 +1047,39 @@
 
     
 
+22. 2022年4月17日——[最常见的单词](https://leetcode-cn.com/problems/most-common-word/)
 
+    ```python
+    class Solution:
+        def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:
+            i, j, n = 0, 0, len(paragraph)
+            paragraph = paragraph.lower()  # 先转为小写字母
+            words = {}  #  保存单词的计数
+            while i < n:
+                if paragraph[i].isalpha():   # 如果当前为字母，则向后找出这个单词
+                    wd = ""
+                    while j < n and paragraph[j].isalpha():
+                        wd += paragraph[j]
+                        j += 1
+                    if wd not in banned:
+                        if wd not in words:  # 加入到计数
+                            words[wd] = 1
+                        else:
+                            words[wd] += 1
+                    i = j
+                i += 1
+                j += 1
+            return max(words, key=lambda x: words[x])
+        
+    # 主要就是把字符串中的单词分离出来计数，split方法就不够用了，因为不能按照空格和标点符号分割，也可以考虑用re正则表达式，但我还是直接遍历对单词计数
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    
+    ```
 
+    
 
-
+23. 
 
 
 
