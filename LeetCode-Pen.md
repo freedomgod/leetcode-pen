@@ -1079,7 +1079,41 @@
 
     
 
-23. 
+23. 2022年4月18日——[字典序排数](https://leetcode-cn.com/problems/lexicographical-numbers/)
+
+    ```python
+    class Solution:
+        def lexicalOrder(self, n: int) -> List[int]:
+            return sorted(range(1, n + 1), key=lambda x: str(x))
+    
+        
+    # 一行代码搞定，就是对[1, n]的数排序，key为数字的字典序
+    # 时间复杂度：O(nlogn)
+    # 空间复杂度：O(1)
+    # 上面虽然简洁，但是不符合题目要求的O(n)复杂度
+    
+    
+    class Solution:
+        def lexicalOrder(self, n: int) -> List[int]:
+            ans = [0] * n
+            num = 1
+            for i in range(n):
+                ans[i] = num
+                if num * 10 <= n:
+                    num *= 10
+                else:
+                    while num % 10 == 9 or num + 1 > n:
+                        num //= 10
+                    num += 1
+            return ans
+    
+        
+    # 深度优先搜索
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
 
 
 
