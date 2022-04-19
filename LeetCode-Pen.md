@@ -1115,7 +1115,40 @@
 
     
 
+24. 2022年4月19日——[字符的最短距离](https://leetcode-cn.com/problems/shortest-distance-to-a-character/)
 
+    ```python
+    class Solution:
+        def shortestToChar(self, s: str, c: str) -> List[int]:
+            n = len(s)
+            ans = [n] * n
+            que = []
+            i = 0
+            while i < n:  # 找出所有c字符的位置，作为搜索的起点
+                ix = s.find(c, i)
+                if ix != -1:
+                    ans[ix] = 0
+                    que.append((ix, 0))
+                    i = ix + 1
+                else:
+                    break
+            while que:              # 广度优先搜索
+                k = len(que)
+                for _ in range(k):
+                    j, d = que.pop(0)
+                    if j > 0 and (d + 1) < ans[j - 1]:
+                        ans[j - 1] = d + 1
+                        que.append((j - 1, d + 1))
+                    if j < (n - 1) and (d + 1) < ans[j + 1]:
+                        ans[j + 1] = d + 1
+                        que.append((j + 1, d + 1))
+            return ans 
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
+
+    
 
 
 
