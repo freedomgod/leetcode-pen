@@ -1150,7 +1150,41 @@
 
     
 
+25. 2022年4月20日——[文件的最长绝对路径](https://leetcode-cn.com/problems/longest-absolute-file-path/)
 
+    ```python
+    class Solution:
+        def lengthLongestPath(self, input: str) -> int:
+            ans = 0
+            cur = ['']  # 存储每一级的目录
+            sub = 0   # 记录子目录的级数
+            i = 0
+            n = len(input)
+            while i < n:
+                if input[i] == '\n':   # \n是\t开始的位置
+                    i += 1
+                    sub = 0
+                    while i < n and input[i] == '\t':# 根据\t的个数判断下一个目录或文件的位置
+                        sub += 1
+                        i += 1
+                else:
+                    directory = ''
+                    while i < n and (input[i].isdigit() or input[i].isalpha() or input[i] in ' .'):
+                        directory += input[i]
+                        i += 1
+                    if sub == 0:   # 在一级目录
+                        cur[0] = directory
+                    else:     # 当前位置是更深一级的目录
+                        cur = cur[:sub] + [directory]
+                    if '.' in directory:   # 每加进一个目录判断是否是文件及长度是否更长
+                        ans = max(ans, len('/'.join(cur)))
+            return ans
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
+
+    
 
 
 
