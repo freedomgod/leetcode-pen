@@ -1186,7 +1186,28 @@
 
     
 
+26. 2022年4月21日——[山羊拉丁文](https://leetcode-cn.com/problems/goat-latin/)
 
+    ```python
+    class Solution:
+        def toGoatLatin(self, sentence: str) -> str:
+            ss = sentence.split(' ')
+            ans = ''
+            vowels = ['a', 'e', 'i', 'o', 'u']  # 元音字母
+            for i, w in enumerate(ss, 1):
+                if w[0].lower() in vowels:
+                    w += 'ma'
+                else:
+                    w = w[1:] + w[0] + 'ma'
+                w += 'a' * i
+                ans += w + ' '
+            return ans[:-1]
+        
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
 
 
 
