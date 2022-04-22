@@ -1209,6 +1209,52 @@
 
     
 
+27. 2022年4月22日——[旋转函数](https://leetcode-cn.com/problems/rotate-function/)
+
+    ```python
+    class Solution:
+        def maxRotateFunction(self, nums: List[int]) -> int:
+            ans = 0
+            n = len(nums)
+            if n == 1:
+                return 0
+            for i, a in enumerate(nums):
+                F = sum(map(lambda x: nums[(x + i) % n] * x, range(n)))  # 旋转后的坐标，然后求和
+                if F > ans:
+                    ans = F
+            return ans
+        
+    # 超时
+    # 时间复杂度：O(n^2)
+    # 空间复杂度：O(1)
+    
+    
+    class Solution:
+        def maxRotateFunction(self, nums: List[int]) -> int:
+            f, n, numSum = 0, len(nums), sum(nums)
+            for i, num in enumerate(nums):
+                f += i * num
+            res = f
+            for i in range(n - 1, 0, -1):
+                f = f + numSum - n * nums[i]  # 具有迭代公式
+                res = max(res, f)
+            return res
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    
+    ```
+
+    
+
+
+
+
+
+
+
+
+
 
 
 
