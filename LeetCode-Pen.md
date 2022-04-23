@@ -1247,7 +1247,123 @@
 
     
 
+28. 2022年4月23日——
 
+    ```python
+    class Line:
+        def __init__(self, k, b):
+            self.k = k
+            self.b = b
+        
+        def get_y(self, z):
+            return self.k * z + self.b
+    
+        def get_dist(self, pos):
+            return abs(self.k * pos[0] + self.b - pos[1]) / sqrt(self.k ** 2 + 1)
+    
+    class Solution:
+        def outerTrees(self, trees: List[List[int]]) -> List[List[int]]:
+            n = len(trees)
+            x = list(map(lambda z: z[0], trees))  # 把坐标的x和y分开
+            y = list(map(lambda z: z[1], trees))
+            bound = max(x), min(x), max(y), min(y)  # 找出树的x、y边界坐标
+            if bound[0] == bound[1] or bound[2] == bound[3]:
+                return trees
+            left, right, up, bottom = [], [], [], []  # 存放上下左右边界的坐标
+            ans, remainder = [], []  # 分别放结果边界的坐标和斜对角的边界坐标
+            for i, t in enumerate(trees):
+                isin = 0
+                if t[0] == bound[0]:
+                    right.append(trees[i])
+                    isin = 1
+                elif t[0] == bound[1]:
+                    left.append(trees[i])
+                    isin = 1
+                if t[1] == bound[2]:
+                    up.append(trees[i])
+                    isin = 1
+                elif t[1] == bound[3]:
+                    bottom.append(trees[i])
+                    isin = 1
+                if isin:
+                    ans.append(t)
+                else:
+                    remainder.append(t)
+            left_up = [max(left, key=lambda z: z[1]), min(up, key=lambda z: z[0])]  # 用两点确定斜对角直线
+            left_bottom = [min(left, key=lambda z: z[1]), min(bottom, key=lambda z: z[0])]
+            right_up = [max(right, key=lambda z: z[1]), max(up, key=lambda z: z[0])]
+            right_bottom = [min(right, key=lambda z: z[1]), max(bottom, key=lambda z: z[0])]
+            line = []
+            for c in [left_up, left_bottom, right_up, right_bottom]:
+                try:
+                    k1 = (c[1][1] - c[0][1]) / (c[1][0] - c[0][0])
+                    line.append(Line(k1, c[0][1] - k1 * c[0][0]))
+                except ZeroDivisionError:
+                    line.append(None)
+            point = [([], -1) for _ in range(len(line))]
+            for pos in remainder:
+            # def judge(pos):  # 判断坐标是否在斜对角线上或处在线外
+                if line[0]:
+                    if pos[1] >= line[0].get_y(pos[0]):
+                        d = line[0].get_dist(pos)
+                        if d > point[0][1]:
+                            point[0] = ([pos[0], pos[1]], d)
+                if line[1]:
+                    if pos[1] <= line[1].get_y(pos[0]):
+                        d = line[1].get_dist(pos)
+                        if d > point[1][1]:
+                            point[1] = ([pos[0], pos[1]], d)
+                if line[2]:
+                    if pos[1] >= line[2].get_y(pos[0]):
+                        d = line[2].get_dist(pos)
+                        if d > point[2][1]:
+                            point[2] = ([pos[0], pos[1]], d)
+                if line[3]:
+                    if pos[1] <= line[3].get_y(pos[0]):
+                        d = line[3].get_dist(pos)
+                        if d > point[3][1]:
+                            point[3] = ([pos[0], pos[1]], d)
+            ans.extend(list(map(lambda z: z[0], filter(lambda q: q[0], point))))
+            return ans
+    # 答案错误😴
+    class Solution:
+        def outerTrees(self, trees: List[List[int]]) -> List[List[int]]:
+            def cross(p: List[int], q: List[int], r: List[int]) -> int:
+                return (q[0] - p[0]) * (r[1] - q[1]) - (q[1] - p[1]) * (r[0] - q[0])
+    
+            n = len(trees)
+            if n < 4:
+                return trees
+    
+            # 按照 x 从小到大排序，如果 x 相同，则按照 y 从小到大排序
+            trees.sort()
+    
+            hull = [0]  # hull[0] 需要入栈两次，不标记
+            used = [False] * n
+            # 求凸包的下半部分
+            for i in range(1, n):
+                while len(hull) > 1 and cross(trees[hull[-2]], trees[hull[-1]], trees[i]) < 0:
+                    used[hull.pop()] = False
+                used[i] = True
+                hull.append(i)
+            # 求凸包的上半部分
+            m = len(hull)
+            for i in range(n - 2, -1, -1):
+                if not used[i]:
+                    while len(hull) > m and cross(trees[hull[-2]], trees[hull[-1]], trees[i]) < 0:
+                        used[hull.pop()] = False
+                    used[i] = True
+                    hull.append(i)
+            # hull[0] 同时参与凸包的上半部分检测，因此需去掉重复的 hull[0]
+            hull.pop()
+    
+            return [trees[i] for i in hull]
+    # 求凸包的算法，只懂大概的意思，但是不会写，只copy了一份代码
+    # 时间复杂度：O(nlogn)
+    # 空间复杂度：O(n)
+    ```
+
+    
 
 
 
