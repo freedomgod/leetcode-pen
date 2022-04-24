@@ -1247,7 +1247,7 @@
 
     
 
-28. 2022年4月23日——
+28. 2022年4月23日——[安装栅栏](https://leetcode-cn.com/problems/erect-the-fence/)
 
     ```python
     class Line:
@@ -1360,6 +1360,51 @@
             return [trees[i] for i in hull]
     # 求凸包的算法，只懂大概的意思，但是不会写，只copy了一份代码
     # 时间复杂度：O(nlogn)
+    # 空间复杂度：O(n)
+    ```
+
+    
+
+29. 2022年4月24日——[二进制间距](https://leetcode-cn.com/problems/binary-gap/)
+
+    ```python
+    class Solution:
+        def binaryGap(self, n: int) -> int:
+            bn = bin(n)[2:]
+            l = len(bn)
+            ans = 0
+            i = bn.find('1')
+            if i == -1:
+                return 0
+            while i < l:
+                ix = bn.find('1', i+1)
+                if ix != -1:
+                    ans = max(ix - i, ans)
+                    i = ix
+                else:
+                    break
+            return ans
+    
+    # 漏了一天
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
+
+30. 2022年4月25日——[随机数索引](https://leetcode-cn.com/problems/random-pick-index/)
+
+    ```python
+    class Solution:
+        def __init__(self, nums: List[int]):
+            self.pos = defaultdict(list)
+            for i, num in enumerate(nums):
+                self.pos[num].append(i)
+    
+        def pick(self, target: int) -> int:
+            return choice(self.pos[target])
+    
+    # 时间复杂度：O(n)
     # 空间复杂度：O(n)
     ```
 
