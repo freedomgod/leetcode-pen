@@ -1410,7 +1410,31 @@
 
     
 
+31. 2022年4月27日——[三维形体投影面积](https://leetcode-cn.com/problems/projection-area-of-3d-shapes/)
 
+    ```python
+    class Solution:
+        def projectionArea(self, grid: List[List[int]]) -> int:
+            m, n = len(grid), len(grid[0])
+            cnt_z, cnt_x, cnt_y = 0, 0, 0
+            for i in range(m):
+                for j in range(n):
+                    if grid[i][j]:
+                        cnt_z += 1
+                cnt_x += max(grid[i])
+            for j in range(n):
+                cur = 0
+                for i in range(m):
+                    if grid[i][j] > cur:
+                        cur = grid[i][j]
+                cnt_y += cur
+            return cnt_x + cnt_y + cnt_z
+        
+    # 时间复杂度：O(mn)
+    # 空间复杂度：O(mn)
+    ```
+
+    
 
 
 
