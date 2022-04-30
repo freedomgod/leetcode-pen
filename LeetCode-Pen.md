@@ -1467,7 +1467,83 @@
 
     
 
+33. 2022年4月28日——[按奇偶排序数组](https://leetcode-cn.com/problems/sort-array-by-parity/)
 
+    ```python
+    class Solution:
+        def sortArrayByParity(self, nums: List[int]) -> List[int]:
+            i, j = 0, len(nums) - 1  # 双指针
+            while i < j:
+                p1 = nums[i] % 2
+                p2 = nums[j] % 2
+                if p1:   # 左边的为奇数
+                    if p2 == 0:
+                        nums[i], nums[j] = nums[j], nums[i]  # 右边的为偶数则交换位置
+                        i += 1
+                    j -= 1
+                else:
+                    if p2:
+                        j -= 1
+                    i += 1
+            return nums
+        
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
+
+34. 2022年4月29日——[建立四叉树](https://leetcode-cn.com/problems/construct-quad-tree/)
+
+    ```python
+    """
+    # Definition for a QuadTree node.
+    class Node:
+        def __init__(self, val, isLeaf, topLeft, topRight, bottomLeft, bottomRight):
+            self.val = val
+            self.isLeaf = isLeaf
+            self.topLeft = topLeft
+            self.topRight = topRight
+            self.bottomLeft = bottomLeft
+            self.bottomRight = bottomRight
+    """
+    
+    class Solution:
+        def construct(self, grid: List[List[int]]) -> 'Node':
+            def dfs(r0: int, c0: int, r1: int, c1: int) -> 'Node':
+                if all(grid[i][j] == grid[r0][c0] for i in range(r0, r1) for j in range(c0, c1)):
+                    return Node(grid[r0][c0] == 1, True)
+                return Node(
+                    True,
+                    False,
+                    dfs(r0, c0, (r0 + r1) // 2, (c0 + c1) // 2),
+                    dfs(r0, (c0 + c1) // 2, (r0 + r1) // 2, c1),
+                    dfs((r0 + r1) // 2, c0, r1, (c0 + c1) // 2),
+                    dfs((r0 + r1) // 2, (c0 + c1) // 2, r1, c1),
+                )
+            return dfs(0, 0, len(grid), len(grid))
+        
+    # 直接递归
+    # 时间复杂度：n^2log(n)
+    # 空间复杂度：log(n)
+    ```
+
+    
+
+35. 2022年4月30日——[最小差值 I](https://leetcode-cn.com/problems/smallest-range-i/)
+
+    ```python
+    class Solution:
+        def smallestRangeI(self, nums: List[int], k: int) -> int:
+            n = len(nums)
+            small, large = min(nums) + k, max(nums) - k
+            return 0 if small > large else large - small
+        
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
 
 
 
