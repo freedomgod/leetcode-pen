@@ -1546,15 +1546,36 @@
     
 
 
-
-
-
-
-
-
 ## 5月
 
+36. 2022年5月1日——[两棵二叉搜索树中的所有元素](https://leetcode-cn.com/problems/all-elements-in-two-binary-search-trees/)
 
+    ```python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution:
+        def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
+            def get_lis(root):  # 把二叉搜索树转换为有序列表
+                if not root:
+                    return []
+                return get_lis(root.left) + [root.val] + get_lis(root.right)
+            lis1, lis2 = get_lis(root1), get_lis(root2)
+            ans = []
+            while lis1 and lis2:
+                ans.append(lis1.pop(0) if lis1[0] < lis2[0] else lis2.pop(0))
+            ans += lis1 + lis2
+            return ans
+        
+    # 类似归并排序一样，转换成有序列表然后合并，当然没有优化所以效率低
+    # 时间复杂度：O(n+m)
+    # 空间复杂度：O(n+m)
+    ```
+
+    
 
 
 
