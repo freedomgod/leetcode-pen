@@ -1577,6 +1577,99 @@
 
     
 
+37. 2022年5月2日——[标签验证器](https://leetcode-cn.com/problems/tag-validator/)
+
+    ```python
+    class Solution:
+        def isValid(self, code: str) -> bool:
+            tags = []
+            i, n = 0, len(code)
+            while i < n:
+                if code[i] != "<":
+                    if not tags:
+                        return False
+                    i += 1
+                    continue
+                if i == n - 1:
+                    return False
+                if code[i + 1] == "/":
+                    j = code.find(">", i)
+                    if j == -1:
+                        return False
+                    tagname = code[i + 2: j]
+                    if not tags or tags[-1] != tagname:
+                        return False
+                    tags.pop()
+                    i = j + 1
+                    if not tags and i != n:
+                        return False
+                elif code[i + 1] == "!":
+                    if not tags:
+                        return False
+                    cdata = code[i + 2: i + 9]
+                    if cdata != "[CDATA[":
+                        return False
+                    j = code.find("]]>", i)
+                    if j == -1:
+                        return False
+                    i = j + 1
+                else:
+                    j = code.find(">", i)
+                    if j == -1:
+                        return False
+                    tagname = code[i + 1: j]
+                    if not 1 <= len(tagname) <= 9 or not all(ch.isupper() for ch in tagname):
+                        return False
+                    tags.append(tagname)
+                    i = j + 1
+    
+            return not tags
+    # 困难题，没做
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
+
+    
+
+38. 2022年5月3日——[重新排列日志文件](https://leetcode-cn.com/problems/reorder-data-in-log-files/)
+
+    ```python
+    class Solution:
+        def reorderLogFiles(self, logs: List[str]) -> List[str]:
+            # 尝试用归并排序
+            def merge(a1, a2):
+                m = []
+                while a1 and a2:
+                    i1 = a1[0].find(' ')
+                    i2 = a2[0].find(' ')
+                    if a1[0][i1+1].isdigit():
+                        if a2[0][i2+1].isdigit():
+                            m.append(a1.pop(0))
+                        else:
+                            m.append(a2.pop(0))
+                    else:
+                        if a2[0][i2+1].isdigit():
+                            m.append(a1.pop(0))
+                        else:
+                            if a1[0][i1+1:] == a2[0][i2+1:]:
+                                m.append(a1.pop(0) if a1[0][:i1] < a2[0][:i2] else a2.pop(0))
+                            else:
+                                m.append(a1.pop(0) if a1[0][i1+1:] < a2[0][i2+1:] else a2.pop(0))
+                m = m + a1 + a2
+                return m
+            def merge_sort(a):
+                if len(a) == 1:
+                    return a
+                left = a[:len(a) // 2]
+                right = a[len(a) // 2:]
+                return merge(merge_sort(left), merge_sort(right))
+            return merge_sort(logs)
+        
+    # 时间复杂度：O(nlogn)
+    # 空间复杂度：O(logn)
+    ```
+
+    
 
 
 
@@ -1604,10 +1697,7 @@
 
 
 
-
-
-
-
+## 6月
 
 
 
