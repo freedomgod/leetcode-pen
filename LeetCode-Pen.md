@@ -1671,7 +1671,34 @@
 
     
 
+39. 2022年5月4日——[找出游戏的获胜者](https://leetcode-cn.com/problems/find-the-winner-of-the-circular-game/)
 
+    ```python
+    class Solution:
+        def findTheWinner(self, n: int, k: int) -> int:
+            remains = list(range(1, n+1))   # 还剩下的编号
+            cur = 0  # 当前计数的开始位置
+            while remains:
+                m = len(remains)
+                nxt = (cur + k - 1) % m  # 下一个位置
+                ans = remains.pop(nxt)
+                cur = nxt if nxt < m else 0
+            return ans
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    
+    # 官方解答的更简洁
+    class Solution:
+        def findTheWinner(self, n: int, k: int) -> int:
+            winner = 1
+            for i in range(2, n + 1):
+                winner = (k + winner - 1) % i + 1
+            return winner
+    
+    ```
+
+    
 
 
 
