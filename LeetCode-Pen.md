@@ -1700,7 +1700,60 @@
 
     
 
+40. 2022年5月5日——[乘积小于 K 的子数组](https://leetcode-cn.com/problems/subarray-product-less-than-k/)
 
+    ```python
+    class Solution:
+        def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+            # 类似贪心算法
+            if k == 0:  # 为0直接返回
+                return 0
+            n = len(nums)
+            pre, nxt = 0, 0   # 计数
+            cur, cur_n = 1, 0   # 当前乘积
+            for i, a in enumerate(nums):
+                if a < k:  # 当前值小于k
+                    nxt += 1
+                    cur = cur * a
+                    cur_n += 1
+                    if cur < k:
+                        nxt += pre + cur_n - 1  # i位置及以前的数目，状态转移方程
+                    else:
+                        while cur_n:
+                            cur //= nums[i - cur_n + 1]
+                            cur_n -= 1
+                            if cur < k:
+                                break
+                        nxt += pre + cur_n - 1
+                else:
+                    cur_n = 0
+                    cur = 1
+                    nxt = pre
+                pre, nxt = nxt, 0
+            return pre
+    
+    # 时间复杂度：O(mn)  # m为最大连续的程度
+    # 空间复杂度：O(1)
+    
+    
+    class Solution:
+        def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+            ans, prod, i = 0, 1, 0
+            for j, num in enumerate(nums):
+                prod *= num
+                while i <= j and prod >= k:
+                    prod //= nums[i]
+                    i += 1
+                ans += j - i + 1
+            return ans
+    
+    # 滑动窗口
+    # 时间复杂度：O(n)  # m为最大连续的程度
+    # 空间复杂度：O(1)
+    
+    ```
+
+    
 
 
 
