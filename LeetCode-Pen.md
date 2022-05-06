@@ -1755,7 +1755,44 @@
 
     
 
+41. 2022年5月6日——[最近的请求次数](https://leetcode-cn.com/problems/number-of-recent-calls/)
 
+    ```python
+    class RecentCounter:
+    
+        def __init__(self):
+            self.left = 0  # 左端的时间节点
+            self.lis = []  # 每次请求的时间列表
+    
+        def ping(self, t: int) -> int:
+            self.lis.append(t)
+            while (t - 3000) > self.lis[self.left]:  # 滑动窗口，保证left为在t3000毫秒内
+                self.left += 1
+            return len(self.lis) - self.left
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    
+    # Your RecentCounter object will be instantiated and called as such:
+    # obj = RecentCounter()
+    # param_1 = obj.ping(t)
+    
+    
+    class RecentCounter:
+        def __init__(self):
+            self.q = deque()
+    
+        def ping(self, t: int) -> int:
+            self.q.append(t)
+            while self.q[0] < t - 3000:
+                self.q.popleft()
+            return len(self.q)
+    # 官方的更简洁的写法
+    # 时间复杂度：均摊 O(1)，每个元素至多入队出队各一次。
+    # 空间复杂度：O(L)，其中 L 为队列的最大元素个数。
+    ```
+
+    
 
 
 
