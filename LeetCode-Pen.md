@@ -1794,7 +1794,40 @@
 
     
 
+42. 2022年5月7日——[最小基因变化](https://leetcode-cn.com/problems/minimum-genetic-mutation/)
 
+    ```python
+    class Solution:
+        def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+            # 整体想的是bfs，从末尾往前判断一次操作，然后找最短的次数
+            if end not in bank:
+                return -1
+            if start not in bank:
+                bank.append(start)
+            def bfs(st, ed, bk, step=0):
+                nbk = bk[:]
+                nbk.remove(ed)
+                available = []
+                for x in nbk:
+                    if sum([y1 != y2 for y1, y2 in zip(x, ed)]) == 1:
+                        if x == st:
+                            return step + 1
+                        else:
+                            available.append(x)
+                if not available:
+                    return -1
+                ans = -1
+                for a in available:
+                    res = bfs(st, a, nbk, step + 1)
+                    if res != -1:
+                        ans = min(ans, res) if ans != -1 else res
+                return ans
+            return bfs(start, end, bank)
+    # 时间复杂度：O(n^2)
+    # 空间复杂度：O(n)  # n为bank的长度
+    ```
+
+    
 
 
 
