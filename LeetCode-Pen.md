@@ -1829,7 +1829,39 @@
 
     
 
+43. 2022年5月8日——
 
+    ```python
+    class Solution:
+        def findDuplicates(self, nums: List[int]) -> List[int]:
+            ans = []
+            i = 0
+            se = set()
+            while i < len(nums):
+                se.add(nums[i])
+                if len(se) == (i + 1):
+                    i += 1
+                else:
+                    ans.append(nums.pop(i))
+            return ans
+    # 不符合题目要求，效率低
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    
+    class Solution:
+        def findDuplicates(self, nums: List[int]) -> List[int]:
+            for i in range(len(nums)):
+                while nums[i] != nums[nums[i] - 1]:
+                    nums[nums[i] - 1], nums[i] = nums[i], nums[nums[i] - 1]
+            return [num for i, num in enumerate(nums) if num - 1 != i]
+    
+    
+    # 很巧妙的一种方法
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
 
 
 
