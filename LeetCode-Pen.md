@@ -1829,7 +1829,7 @@
 
     
 
-43. 2022年5月8日——
+43. 2022年5月8日——[数组中重复的数据](https://leetcode.cn/problems/find-all-duplicates-in-an-array/)
 
     ```python
     class Solution:
@@ -1863,7 +1863,46 @@
 
     
 
+44. 2022年5月9日——[增减字符串匹配](https://leetcode.cn/problems/di-string-match/)
 
+    ```python
+    class Solution:
+        def diStringMatch(self, s: str) -> List[int]:
+            n = len(s)
+            lis = []
+            available = list(range(n + 1))
+            for i in range(n):
+                if s[i] == 'I':
+                    lis.append(available.pop(0))
+                else:
+                    lis.append(available.pop(-1))
+            return lis + available
+    # 每次从可取值中弹出一大一小的值
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    
+    
+    class Solution:
+        def diStringMatch(self, s: str) -> List[int]:
+            lo = 0
+            hi = n = len(s)
+            perm = [0] * (n + 1)
+            for i, ch in enumerate(s):
+                if ch == 'I':
+                    perm[i] = lo
+                    lo += 1
+                else:
+                    perm[i] = hi
+                    hi -= 1
+            perm[n] = lo  # 最后剩下一个数，此时 lo == hi
+            return perm
+    
+    # 双指针解法
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(1)
+    ```
+
+    
 
 
 
