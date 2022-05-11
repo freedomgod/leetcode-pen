@@ -1904,9 +1904,79 @@
 
     
 
+45. 2022年5月10日——[猫和老鼠 II](https://leetcode.cn/problems/cat-and-mouse-ii/)
 
+    ```python
+    # 挺难的，题解也看的不明白
+    ```
 
+    
 
+46. 2022年5月11日——[序列化和反序列化二叉搜索树](https://leetcode.cn/problems/serialize-and-deserialize-bst/)
+
+    ```python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.left = None
+    #         self.right = None
+    
+    class Codec:
+    
+        def serialize(self, root: TreeNode) -> str:
+            """Encodes a tree to a single string.
+            """
+            # 把树用层序遍历表示，空节点也填充进去，保证为满二叉树
+            if root is None:
+                return '[]'
+            q = [root]
+            lis = []
+            while q:
+                n = len(q)
+                for _ in range(n):
+                    nd = q.pop(0)
+                    if nd:
+                        lis.append(nd.val)
+                        # if nd.left or nd.right:
+                        q.append(nd.left)
+                        q.append(nd.right)
+                    else:
+                        lis.append(None)
+            return str(lis)
+    
+        def deserialize(self, data: str) -> TreeNode:
+            """Decodes your encoded data to tree.
+            """
+            lis = eval(data)
+            if not lis:
+                return None
+            i, n = 0, len(lis)
+            root = TreeNode(lis[i])
+            q = [root]
+            while (2 * i + 2) < n:
+                t = q.pop(0)
+                if lis[2 * i + 1] is not None:
+                    t.left = TreeNode(lis[2 * i + 1])
+                    q.append(t.left)
+                if lis[2 * i + 2] is not None:
+                    t.right = TreeNode(lis[2 * i + 2])
+                    q.append(t.right)
+                i += 1
+            return root
+            
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    # Your Codec object will be instantiated and called as such:
+    # Your Codec object will be instantiated and called as such:
+    # ser = Codec()
+    # deser = Codec()
+    # tree = ser.serialize(root)
+    # ans = deser.deserialize(tree)
+    # return ans
+    ```
+
+    
 
 
 
