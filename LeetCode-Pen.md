@@ -1978,7 +1978,27 @@
 
     
 
+47. 2022年5月12日——[删列造序](https://leetcode.cn/problems/delete-columns-to-make-sorted/)
 
+    ```python
+    class Solution:
+        def minDeletionSize(self, strs: List[str]) -> int:
+            m, n = len(strs), len(strs[0])
+            cnt = 0
+            for j in range(n):
+                cur = strs[0][j]
+                for i in range(1, m):
+                    if strs[i][j] < cur:
+                        cnt += 1
+                        break
+                    cur = strs[i][j]
+            return cnt
+    
+    # 时间复杂度：O(mn)
+    # 空间复杂度：O(1)
+    ```
+
+    
 
 
 
