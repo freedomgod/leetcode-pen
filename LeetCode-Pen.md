@@ -2000,6 +2000,92 @@
 
     
 
+47. 2022年5月13日——[一次编辑](https://leetcode.cn/problems/one-away-lcci/)
+
+    ```python
+    class Solution:
+        def oneEditAway(self, first: str, second: str) -> bool:
+            m, n = len(first), len(second)
+            if m < n:
+                return self.oneEditAway(second, first)
+            if m - n > 1:
+                return False
+            for i, (x, y) in enumerate(zip(first, second)):
+                if x != y:
+                    return first[i + 1:] == second[i + 1:] if m == n else first[i + 1:] == second[i:]  # 注：改用下标枚举可达到 O(1) 空间复杂度
+            return True
+    
+    # 时间复杂度：O(m+n)
+    # 空间复杂度：O(1)
+    ```
+
+    
+
+49. 2022年5月14日——[贴纸拼词](https://leetcode.cn/problems/stickers-to-spell-word/)
+
+    ```python
+    class Solution:
+        def minStickers(self, stickers: List[str], target: str) -> int:
+            def trans(s):
+                cnts = Counter()
+                for c in s:
+                    if c in target:
+                        cnts[c] += 1
+                return cnts
+    
+            availables = [c for st in stickers if (c:=trans(st))]
+            queue = deque([(target, 0)])
+            explored = {target}
+            while queue:
+                cur, step = queue.popleft()
+                if not cur:
+                    return step
+                for avl in availables:
+                    if cur[0] in avl:
+                        nxt = cur
+                        for k, v in avl.items():
+                            nxt = nxt.replace(k, '', v)
+                        if nxt not in explored:
+                            explored.add(nxt)
+                            queue.append((nxt, step + 1))
+            return -1
+    # 深搜或者广搜，但是写代码还得注意些，自己没写出来，抄代码
+    ```
+
+    
+
+50. 2022年5月15日——[最大三角形面积](https://leetcode.cn/problems/largest-triangle-area/)
+
+    ```python
+    class Solution:
+        def largestTriangleArea(self, points: List[List[int]]) -> float:
+            # 直接暴力？
+            area = 0
+            n = len(points)
+            for i in range(n - 2):
+                for j in range(i + 1, n - 1):
+                    for k in range(j + 1, n):
+                        s = abs(points[i][0] * points[j][1]- points[i][0] * points[k][1] + points[j][0] * points[k][1] - points[j][0] * points[i][1] + points[k][0] * points[i][1] - points[k][0] * points[j][1]) / 2
+                        if s > area:
+                            area = s
+            return area
+    # 时间复杂度：O(n^3)
+    # 空间复杂度：O(1)
+    
+    
+    class Solution:
+        def largestTriangleArea(self, points: List[List[int]]) -> float:
+            def triangleArea(x1: int, y1: int, x2: int, y2: int, x3: int, y3: int) -> float:
+                return abs(x1 * y2 + x2 * y3 + x3 * y1 - x1 * y3 - x2 * y1 - x3 * y2) / 2
+            return max(triangleArea(x1, y1, x2, y2, x3, y3) for (x1, y1), (x2, y2), (x3, y3) in combinations(points, 3))
+    # 时间复杂度：O(n^3)
+    # 空间复杂度：O(1)
+    ```
+
+    
+
+
+
 
 
 
