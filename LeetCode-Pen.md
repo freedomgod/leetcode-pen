@@ -2084,9 +2084,89 @@
 
     
 
+51. 2022年5月16日——[后继者](https://leetcode.cn/problems/successor-lcci/)
 
+    ```python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.left = None
+    #         self.right = None
+    
+    class Solution:
+        def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> TreeNode:
+            st, pre, cur = [], None, root
+            while st or cur:
+                while cur:
+                    st.append(cur)
+                    cur = cur.left
+                cur = st.pop()
+                if pre == p:
+                    return cur
+                pre = cur
+                cur = cur.right
+            return None
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
 
+    
 
+52. 2022年5月17日——[验证外星语词典](https://leetcode.cn/problems/verifying-an-alien-dictionary/)
+
+    ```python
+    class Solution:
+        def isAlienSorted(self, words: List[str], order: str) -> bool:
+            n = len(words)
+            if n == 1:
+                return True
+            mapped = {c: i for i, c in enumerate(order)}
+            for i in range(n-1):
+                for w1, w2 in zip(words[i], words[i+1]):
+                    if mapped[w2] < mapped[w1]:
+                        return False
+                    elif mapped[w2] > mapped[w1]:
+                        break
+                else:
+                    if len(words[i]) > len(words[i+1]):
+                        return False
+            return True
+    
+    # 时间复杂度：O(n)  # 所有字母的长度
+    # 空间复杂度：O(1)
+    ```
+
+    
+    ```c++
+    class Solution {
+    public:
+        bool isAlienSorted(vector<string>& words, string order) {
+            map<char, int> mapped;
+            for (int i=0; i < order.length(); i++){
+                mapped[order[i]] = i;
+            }
+    
+            for (int i=0; i < words.size() - 1; i++){
+                int m = words[i].length(), n = words[i+1].length();
+                for (int j=0; j < min(m, n); j++){
+                    if (mapped[words[i][j]] > mapped[words[i+1][j]]){
+                        return false;
+                    }
+                    else if (mapped[words[i][j]] < mapped[words[i+1][j]]){
+                        break;
+                    }
+                }
+                if ((m > n) && (words[i].substr(0, n) == words[i+1].substr(0, n))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    };
+    ```
+    
+    
 
 
 
@@ -2095,8 +2175,6 @@
 
 
 ## 6月
-
-
 
 
 
