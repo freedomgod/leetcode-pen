@@ -2168,6 +2168,108 @@
     
     
 
+53. 2022年5月18日——[乘法表中第k小的数](https://leetcode.cn/problems/kth-smallest-number-in-multiplication-table/)
+
+    ```python
+    class Solution:
+        def findKthNumber(self, m: int, n: int, k: int) -> int:
+            a = []
+            for i in range(1, m+1):
+                for j in range(1, n+1):
+                    heapq.heappush(a, i * j)
+            return heapq.nsmallest(k, a)[-1]
+        # 想通过堆来做，但也会超时
+        
+    
+    class Solution:
+        def findKthNumber(self, m: int, n: int, k: int) -> int:
+            left, right = 1, m * n
+            while left < right:
+                x = left + (right - left) // 2
+                cnt = x // n * n
+                for i in range(x // n + 1, m + 1):
+                    cnt += x // i
+                if cnt >= k:
+                    right = x
+                else:
+                    left = x + 1
+            return left
+    
+    # 使用二分查找的思想，很妙
+    # 时间复杂度：O(mlog(mn))
+    # 空间复杂度：O(1)
+    ```
+
+    ```c++
+    class Solution {
+    public:
+        int findKthNumber(int m, int n, int k) {
+            int left = 1, right = m * n;
+            while (left < right) {
+                int x = left + (right - left) / 2;
+                int count = x / n * n;
+                for (int i = x / n + 1; i <= m; ++i) {
+                    count += x / i;
+                }
+                if (count >= k) {
+                    right = x;
+                } else {
+                    left = x + 1;
+                }
+            }
+            return left;
+        }
+    };
+    // 使用二分查找的思想，很妙
+    // 时间复杂度：O(mlog(mn))
+    // 空间复杂度：O(1)
+    ```
+
+    
+
+54. 2022年5月19日——[最少移动次数使数组元素相等 II](https://leetcode.cn/problems/minimum-moves-to-equal-array-elements-ii/)
+
+    ```python
+    class Solution:
+        def minMoves2(self, nums: List[int]) -> int:
+            nums.sort()
+            return sum(abs(num - nums[len(nums) // 2]) for num in nums)
+    # 排序，选中位数，求和
+    # 时间复杂度：O(nlog(n))
+    # 空间复杂度：O(1)
+    ```
+
+    ```c++
+    class Solution {
+    public:
+        int minMoves2(vector<int>& nums) {
+            sort(nums.begin(), nums.end());
+            int n = nums.size(), ret = 0, x = nums[n / 2];
+            for (int i = 0; i < n; i++) {
+                ret += abs(nums[i] - x);
+            }
+            return ret;
+        }
+    };
+    
+    # 时间复杂度：O(nlog(n))
+    # 空间复杂度：O(logn)
+    ```
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
