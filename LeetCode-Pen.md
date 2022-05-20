@@ -2258,7 +2258,70 @@
 
     
 
+55. 2022年5月20日——[寻找右区间](https://leetcode.cn/problems/find-right-interval/)
 
+    ```python
+    ```
+
+    ```c++
+    // 创建一个类记录序号
+    class interval_cls {
+    public:
+        vector<int> inter;
+        int id;
+        interval_cls() {};
+        interval_cls(vector<int> vect_inter, int ids):inter(vect_inter),id(ids) {};
+    };
+    
+    // c++中为sort函数提供比较方法
+    bool interval_cmp(interval_cls c1, interval_cls c2){
+        return c1.inter[0] < c2.inter[0];
+    }
+    
+    // 二分查找
+    int binary_search(vector<interval_cls> v_cls, int endi){
+        int n = v_cls.size(), left = 0, right = n - 1;
+        int mid;
+        while (left < right){
+            mid = (left + right) / 2;
+            if (v_cls[mid].inter[0] < endi){
+                left = mid + 1;
+            }
+            else if (v_cls[mid].inter[0] == endi){
+                return v_cls[mid].id;
+            }
+            else {
+                right = mid;
+            }
+        }
+        if (v_cls[right].inter[0] < endi){
+            return -1;
+        } else {
+            return v_cls[right].id;
+        }
+    }
+    
+    class Solution {
+    public:
+        vector<int> findRightInterval(vector<vector<int>>& intervals) {
+            vector<interval_cls> vect_cls;
+            int n = intervals.size();
+            for (int i = 0; i < n; ++i){
+                interval_cls tmp(intervals[i], i);
+                vect_cls.push_back(tmp);
+            }
+            sort(vect_cls.begin(), vect_cls.end(), interval_cmp);
+            vector<int> ans;
+            for (int i = 0; i < n; ++i){
+                ans.push_back(binary_search(vect_cls, intervals[i][1]));
+            }
+            return ans;
+        }
+    };
+    // 会超时，但是思想就是二分查找，这里应该是实现的方式不对
+    ```
+
+    
 
 
 
