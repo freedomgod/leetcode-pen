@@ -2323,7 +2323,37 @@
 
     
 
+56. 2022年5月21日——[在长度 2N 的数组中找出重复 N 次的元素](https://leetcode.cn/problems/n-repeated-element-in-size-2n-array/)
 
+    ```python
+    class Solution:
+        def repeatedNTimes(self, nums: List[int]) -> int:
+            cnt = Counter(nums)
+            return [x for x in cnt if cnt[x] > 1][0]
+    ```
+
+    ```c++
+    class Solution {
+    public:
+        int repeatedNTimes(vector<int>& nums) {
+            // 按照题目意思，只需要找有重复的元素，可以使用map
+            map<int, int> mapped;
+            for (int i = 0; i < nums.size(); ++i){
+                auto it = mapped.find(nums[i]);
+                if (it == mapped.end()){
+                    mapped[nums[i]] = 1;
+                } else {
+                    return nums[i];
+                }
+            }
+            return 0;
+        }
+    };
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    ```
+
+    
 
 
 
