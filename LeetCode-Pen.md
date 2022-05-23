@@ -2355,9 +2355,136 @@
 
     
 
+57. 2022年5月22日——[我能赢吗](https://leetcode.cn/problems/can-i-win/)
 
+    ```python
+    class Solution:
+        def canIWin(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
+            @cache
+            def dfs(usedNumbers: int, currentTotal: int) -> bool:
+                for i in range(maxChoosableInteger):
+                    if (usedNumbers >> i) & 1 == 0:
+                        if currentTotal + i + 1 >= desiredTotal or not dfs(usedNumbers | (1 << i), currentTotal + i + 1):
+                            return True
+                return False
+    
+            return (1 + maxChoosableInteger) * maxChoosableInteger // 2 >= desiredTotal and dfs(0, 0)
+    
+    s
+    # 博弈论DP？不会做
+    
+    ```
 
+    
 
+58. 2022年5月23日——[为高尔夫比赛砍树](https://leetcode.cn/problems/cut-off-trees-for-golf-event/)
+
+    ```python
+    class Solution:
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        def dfs(self, pos, d2, area):
+            new_area = deepcopy(area)
+            new_area[pos[0]][pos[1]] = 0
+            m, n = len(new_area), len(new_area[0])
+            q = deque([[pos[0], pos[1], 0]])
+            while q:
+                k = len(q)
+                for _ in range(k):
+                    x, y, dis = q.popleft()
+                    for dr in self.dirs:
+                        nx, ny = x + dr[0], y + dr[1]
+                        if (0 <= nx < m) and (0 <= ny < n) and (new_area[nx][ny] != 0):
+                            if new_area[nx][ny] == d2:
+                                return dis + 1
+                            q.append([nx, ny, dis + 1])
+                            new_area[nx][ny] = 0
+            return -1
+            
+        def cutOffTree(self, forest: List[List[int]]) -> int:
+            # 用广度优先搜索
+            trees = sorted([[c, i, j] for i, r in enumerate(forest) for j, c in enumerate(r) if c not in [0, 1]])
+            step = 0
+            pos = [0, 0]
+            for t, i, j in trees:
+                if t == forest[pos[0]][pos[1]]:
+                    dis = 0
+                else:
+                    dis = self.dfs(pos, t, forest)
+                if dis == -1:
+                    return -1
+                step += dis
+                pos = [i, j]
+            return step
+    ```
+
+    ```c++
+    class Solution {
+    public:
+        int dfs(int *pos, int d, vector<vector<int>> forest){
+            int k, m = forest.size(), n = forest[0].size();
+            int dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+            queue<vector<int>> q;
+            vector<int> tmp = {pos[0], pos[1], 0};
+            q.push(tmp);
+            forest[pos[0]][pos[1]] = 0;
+            while (!q.empty()){
+                k = q.size();
+                for (int i = 0; i < k; ++i){
+                    tmp = q.front();
+                    q.pop();
+                    for (int j = 0; j < 4; ++j){
+                        int nx = tmp[0] + dirs[j][0], ny = tmp[1] + dirs[j][1];
+                        if ((nx >= 0) && (nx < m) && (ny >= 0) && (ny < n) && (forest[nx][ny] != 0)){
+                            if (forest[nx][ny] == d){
+                                return tmp[2] + 1;
+                            }
+                            vector<int> tem = {nx, ny, tmp[2] + 1};
+                            q.push(tem);
+                            forest[tmp[0]][tmp[1]] = 0;
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
+    
+        static bool cmp(vector<int> a, vector<int> b){
+            return a[0] < b[0];
+        }
+    
+        int cutOffTree(vector<vector<int>>& forest) {
+            vector<vector<int>> trees;
+            for (int i = 0; i < forest.size(); ++i){
+                for (int j = 0; j < forest[i].size(); ++j){
+                    if ((forest[i][j] != 0) && (forest[i][j] != 1)){
+                        vector<int> tmp={forest[i][j], i, j};
+                        trees.push_back(tmp);
+                    }
+                }
+            }
+            sort(trees.begin(), trees.end(), cmp);
+            int dist, step = 0;
+            int pos[2] = {0, 0};
+            for (int i = 0; i < trees.size(); ++i){
+                int d = trees[i][0];
+                if (forest[pos[0]][pos[1]] == d){
+                    dist = 0;
+                } else {
+                    dist = dfs(pos, d, forest);
+                }
+                if (dist == -1){
+                    return -1;
+                }
+                step += dist;
+                pos[0] = trees[i][1];
+                pos[1] = trees[i][2];
+            }
+            return step;
+        }
+    };
+    ```
+
+    
 
 
 
