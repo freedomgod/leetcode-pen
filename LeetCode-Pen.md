@@ -2486,6 +2486,158 @@
 
     
 
+59. 2022年5月24日——[单值二叉树](https://leetcode.cn/problems/univalued-binary-tree/)
+
+    ```c++
+    /**
+     * Definition for a binary tree node.
+     * struct TreeNode {
+     *     int val;
+     *     TreeNode *left;
+     *     TreeNode *right;
+     *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+     *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+     *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+     * };
+     */
+    class Solution {
+    public:
+        bool isUnivalTree(TreeNode* root) {
+            // 深搜
+            int v = root->val;
+            stack<TreeNode *> stk;
+            TreeNode* cur = root;
+            while ((!stk.empty()) || (cur)){
+                while (cur){
+                    if (cur->val != v){
+                        return false;
+                    }
+                    stk.push(cur);
+                    cur = cur->left;
+                }
+                cur = stk.top();
+                stk.pop();
+                cur = cur->right;
+            }
+            return true;
+        }
+    };
+    
+    class Solution {
+    public:
+        bool isUnivalTree(TreeNode* root) {
+            // 广搜
+            int n, v = root->val;
+            queue<TreeNode *> q;
+            TreeNode* cur;
+            q.push(root);
+            while (!q.empty()){
+                n = q.size();
+                for (int i = 0; i < n; ++i){
+                    cur = q.front();
+                    q.pop();
+                    if (cur->val != v){
+                        return false;
+                    }
+                    if (cur->left){
+                        q.push(cur->left);
+                    }
+                    if (cur->right){
+                        q.push(cur->right);
+                    }
+                }
+            }
+            return true;
+        }
+    };
+    
+    class Solution {
+    public:
+        bool isUnivalTree(TreeNode* root) {
+            // 递归
+            if (!root){
+                return true;
+            }
+            int v = root->val;
+            if (((root->left) && (root->left->val != v)) || ((root->right) && (root->right->val != v))){
+                return false;
+            }
+            return isUnivalTree(root->left) && isUnivalTree(root->right);
+        }
+    };
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    ```
+
+    ```python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution:
+        def isUnivalTree(self, root: TreeNode) -> bool:
+            if not root:
+                return True
+            v = root.val
+            if (root.left and v != root.left.val) or (root.right and v != root.right.val):
+                return False
+            return self.isUnivalTree(root.left) and self.isUnivalTree(root.right)
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    ```
+
+    
+
+60. 2022年5月25日——[环绕字符串中唯一的子字符串](https://leetcode.cn/problems/unique-substrings-in-wraparound-string/)
+
+    ```python
+    class Solution:
+        def findSubstringInWraproundString(self, p: str) -> int:
+            dp = defaultdict(int)
+            k = 0
+            for i, ch in enumerate(p):
+                if i > 0 and (ord(ch) - ord(p[i - 1])) % 26 == 1:  # 字符之差为 1 或 -25
+                    k += 1
+                else:
+                    k = 1
+                dp[ch] = max(dp[ch], k)
+            return sum(dp.values())
+    # 用动态规划做
+    ```
+
+    ```c++
+    class Solution {
+    public:
+        int findSubstringInWraproundString(string p) {
+            vector<int> dp(26);
+            int k = 0;
+            for (int i = 0; i < p.length(); ++i) {
+                if (i && (p[i] - p[i - 1] + 26) % 26 == 1) { // 字符之差为 1 或 -25
+                    ++k;
+                } else {
+                    k = 1;
+                }
+                dp[p[i] - 'a'] = max(dp[p[i] - 'a'], k);
+            }
+            return accumulate(dp.begin(), dp.end(), 0);
+        }
+    };
+    
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    ```
+
+    
+
+
+
+
+
+
+
 
 
 
