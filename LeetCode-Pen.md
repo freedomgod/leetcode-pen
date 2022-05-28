@@ -2632,11 +2632,132 @@
 
     
 
+61. 2022年5月26日——[掉落的方块](https://leetcode.cn/problems/falling-squares/)
 
+    ```python
+    class Solution:
+        def fallingSquares(self, positions: List[List[int]]) -> List[int]:
+            n = len(positions)
+            heights = [0] * n
+            for i, (left1, side1) in enumerate(positions):
+                right1 = left1 + side1 - 1
+                heights[i] = side1
+                for j in range(i):
+                    left2, right2 = positions[j][0], positions[j][0] + positions[j][1] - 1
+                    if right1 >= left2 and right2 >= left1:
+                        heights[i] = max(heights[i], heights[j] + side1)
+            for i in range(1, n):
+                heights[i] = max(heights[i], heights[i - 1])
+            return heights
+    
+    ```
 
+    
 
+62. 2022年5月27日——[单词距离](https://leetcode.cn/problems/find-closest-lcci/)
 
+    ```python
+    class Solution:
+        def findClosest(self, words: List[str], word1: str, word2: str) -> int:
+            i1, i2 = -1, -1
+            ans = len(words)
+            for i, w in enumerate(words):
+                if w == word1:
+                    i1 = i
+                elif w == word2:
+                    i2 = i
+                if i1 >= 0 and i2 >= 0:
+                    ans = min(ans, abs(i1 - i2))
+            return ans
+    # 直接暴力
+    
+    ```
 
+    ```c++
+    class Solution {
+    public:
+        int findClosest(vector<string>& words, string word1, string word2) {
+            vector<int> v1, v2, v;
+            for (int i = 0; i < words.size(); ++i){
+                if (words[i] == word1){
+                    v1.push_back(i);
+                }
+                else if (words[i] == word2){
+                    v2.push_back(i);
+                }
+            }
+            for (auto it1: v1){
+                for (auto it2: v2){
+                    v.push_back(abs(it1 - it2));
+                }
+            }
+            return *min_element(v.begin(), v.end());
+        }
+    };
+    ```
+
+    
+
+63. 2022年5月28日——[删除最外层的括号](https://leetcode.cn/problems/remove-outermost-parentheses/)
+
+    ```python
+    class Solution:
+        def removeOuterParentheses(self, s: str) -> str:
+            ans = ""
+            primitive = []
+            n = 0
+            for i, c in enumerate(s):
+                if not primitive and c == '(':  # 原语为空
+                    primitive.append(c)
+                    n += 1
+                else:  # 原语非空
+                    if c == '(':
+                        primitive.append(c)
+                        n += 1
+                    else:
+                        primitive.pop()
+                        n -= 1
+                if n > 1 or (n >= 1 and c == ')'):
+                    ans += c
+            return ans
+    
+    # 时间复杂度：O(n)
+    # 空间复杂度：O(n)
+    
+    ```
+
+    ```c++
+    class Solution {
+    public:
+        string removeOuterParentheses(string s) {
+            string ans;
+            int n = 0;
+            stack<char> stk;
+            for (int i = 0; i < s.length(); ++i){
+                if (stk.empty()) {
+                    stk.push(s[i]);
+                    n += 1;
+                }
+                else {
+                    if (s[i] == '(') {
+                        stk.push('(');
+                        n += 1;
+                    }
+                    else {
+                        stk.pop();
+                        n -= 1;
+                    }
+                }
+                if ((n > 1) || (n >= 1 && s[i] == ')')) {
+                    ans += s[i];
+                }
+            }
+            return ans;
+        }
+    };
+    ```
+
+    
 
 
 
