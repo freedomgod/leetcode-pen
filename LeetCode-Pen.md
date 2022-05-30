@@ -2759,9 +2759,188 @@
 
     
 
+64. 2022年5月29日——[验证IP地址](https://leetcode.cn/problems/validate-ip-address/)
 
+    ```python
+    class Solution:
+        def validIPAddress(self, queryIP: str) -> str:
+            st = queryIP.split('.')
+            if len(st) == 4:
+                for c in st:
+                    if c.isdigit() and str(int(c)) == c and 0 <= int(c) <= 255:
+                        continue
+                    return 'Neither'
+                return 'IPv4'
+            else:
+                st = queryIP.split(':')
+                if len(st) == 8:
+                    for c in st:
+                        t = all(map(lambda y: 'a' <= y <= 'f' or 'A' <= y <= 'F', filter(lambda x: x.isalpha(), c)))
+                        if 1 <= len(c) <= 4 and t:
+                            continue
+                        return 'Neither'
+                    return 'IPv6'
+                return 'Neither'
+                
+    ```
 
+    ```c++
+    class Solution {
+    public:
+        vector<string> split_s(string s, char delim){
+            int n = s.size(), j = 0;
+            vector<string> vs;
+            for (int i = 0; i < n; ++i){
+                if (s[i] == delim){
+                    vs.push_back(s.substr(j, i - j));
+                    j = i + 1;
+                }
+            }
+            vs.push_back(s.substr(j));
+            return vs;
+        }
+        bool is_num(string s){
+            if (s.empty()){
+                return false;
+            }
+            for (auto c: s){
+                if (c >= '0' && c <= '9'){
+                    continue;
+                }
+                return false;
+            }
+            return true;
+        }
+        bool to_int(string s){
+            int ans = 0;
+            for(int i = 0; i < s.size(); ++i){
+                ans = ans * 10 + s[i] - '0';
+                if (ans > 255){
+                    return false;
+                }
+            }
+            return true;
+        }
+        bool is_pre0(string s){
+            int n = s.size();
+            if (n <= 1){
+                return false;
+            }
+            return s[0] == '0';
+        }
+        bool is_hex(string s){
+            for (auto c: s){
+                if (c >= '0' && c <= '9'){
+                    continue;
+                }
+                if ((c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')){
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
+        string validIPAddress(string queryIP) {
+            vector<string> vs = split_s(queryIP, '.');
+            if (vs.size() == 4){
+                for (auto ss: vs){
+                    if (is_num(ss) && !is_pre0(ss) && to_int(ss)){
+                        continue;
+                    }
+                    return "Neither";
+                }
+                return "IPv4";
+            }
+            else {
+                vector<string> vs = this->split_s(queryIP, ':');
+                if (vs.size() == 8){
+                    for (auto ss: vs){
+                        if ((ss.size() >= 1 && ss.size() <= 4) && is_hex(ss)){
+                            continue;
+                        }
+                        return "Neither";
+                    }
+                    return "IPv6";
+                }
+                return "Neither";
+            }
+        }
+    };
+    ```
 
+    
+
+65. 2022年5月30日——[从根到叶的二进制数之和](https://leetcode.cn/problems/sum-of-root-to-leaf-binary-numbers/)
+
+    ```python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution:
+        def sumRootToLeaf(self, root: Optional[TreeNode]) -> int:
+            ans = 0
+            def dfs(nd, st=''):
+                if not nd:
+                    return 
+                s = st + str(nd.val)
+                if not (nd.left or nd.right):
+                    nonlocal ans
+                    ans += int(s, 2)
+                    return 
+                dfs(nd.left, s)
+                dfs(nd.right, s)
+            dfs(root)
+            return ans
+    d
+    # 时间复杂度：O(n)
+    # 空间复杂度：o(n)
+    ```
+
+    ```c++
+    /**
+     * Definition for a binary tree node.
+     * struct TreeNode {
+     *     int val;
+     *     TreeNode *left;
+     *     TreeNode *right;
+     *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+     *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+     *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+     * };
+     */
+    class Solution {
+    public:
+        int ans = 0;
+        int bin2int(string ss){
+            int res = 0, n = ss.length(), b = 1;
+            for (int i = n - 1; i >= 0; --i){
+                res += (ss[i] - '0') * b;
+                b *= 2;
+            }
+            return res;
+        }
+        void dfs(TreeNode* nd, string st){
+            if (nd){
+                string s = st + to_string(nd->val);
+                if (!(nd->left || nd->right)){
+                    ans += bin2int(s);
+                }
+                dfs(nd->left, s);
+                dfs(nd->right, s);
+            }
+        }
+        int sumRootToLeaf(TreeNode* root) {
+            dfs(root, "");
+            return ans;
+        }
+    };
+    ```
+
+    
 
 
 
